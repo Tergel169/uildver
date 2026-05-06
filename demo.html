@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BoxCraft Мини Үйлдвэр</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brown: #5c3d1e;
+    --brown2: #8b5e3c;
+    --tan: #d4a96a;
+    --cream: #fdf6ec;
+    --dark: #1a1208;
+    --accent: #e8821a;
+    --muted: #7a6248;
+    --white: #fff;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--dark); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+
+  nav {
+    position: sticky; top: 0; z-index: 999;
+    background: var(--brown);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 4rem; height: 64px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: var(--tan); letter-spacing: 0.06em; text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 0.3rem; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.72); text-decoration: none;
+    font-size: 0.9rem; font-weight: 700;
+    padding: 0.45rem 1.1rem; border-radius: 100px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.12); color: var(--tan); }
+  .nav-cta {
+    background: var(--accent); color: var(--white);
+    padding: 0.5rem 1.4rem; border-radius: 100px;
+    font-weight: 700; font-size: 0.88rem; text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  section { scroll-margin-top: 64px; }
+
+  #home {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #2e1a08 0%, #5c3d1e 50%, #8b5e3c 100%);
+    color: var(--white);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center;
+    padding: 7rem 2rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  #home::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(232,130,26,0.18); border: 1px solid rgba(232,130,26,0.45);
+    color: var(--tan); padding: 0.4rem 1.1rem; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 1.6rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .badge::before {
+    content: ''; width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+  #home h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.2rem, 7vw, 5.8rem);
+    line-height: 1.02; letter-spacing: 0.03em;
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  #home h1 span { color: var(--tan); }
+  #home .sub {
+    color: rgba(255,255,255,0.68); font-size: 1.1rem;
+    max-width: 560px; margin-bottom: 2.5rem; line-height: 1.75;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    justify-content: center; margin-bottom: 4rem;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-main {
+    background: var(--accent); color: var(--white);
+    padding: 0.85rem 2.2rem; border-radius: 100px;
+    font-weight: 700; text-decoration: none; font-size: 1rem;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .btn-main:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    padding: 0.85rem 2.2rem; border-radius: 100px;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    text-decoration: none; font-size: 1rem; font-weight: 700;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--tan); background: rgba(255,255,255,0.07); }
+
+  .team-wrap {
+    width: 100%; max-width: 800px;
+    border-radius: 20px; overflow: hidden;
+    border: 3px solid rgba(212,169,106,0.4);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+    margin-bottom: 3.5rem; position: relative;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .team-photo {
+    width: 100%; height: 340px;
+    background: linear-gradient(135deg, #2e1a08, #7a4e2a);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1rem;
+  }
+  .team-photo .cam { font-size: 3.5rem; opacity: 0.35; }
+  .team-photo p { color: rgba(255,255,255,0.35); font-size: 0.88rem; font-weight: 600; }
+  .photo-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.72));
+    padding: 1.5rem; text-align: left;
+  }
+  .photo-label h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--tan); letter-spacing: 0.05em; }
+  .photo-label p { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem; max-width: 800px; width: 100%; margin-bottom: 3rem;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+  .stat {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 1.2rem; text-align: center;
+  }
+  .stat .n { font-family: 'Bebas Neue', sans-serif; font-size: 2.3rem; color: var(--tan); }
+  .stat .l { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
+
+  .feat-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem; max-width: 800px; width: 100%;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+  .feat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212,169,106,0.18);
+    border-radius: 14px; padding: 1.3rem;
+    display: flex; align-items: flex-start; gap: 0.9rem; text-align: left;
+    transition: border-color 0.2s;
+  }
+  .feat:hover { border-color: rgba(212,169,106,0.45); }
+  .feat-icon {
+    width: 42px; height: 42px; min-width: 42px;
+    background: rgba(232,130,26,0.15); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .feat h4 { font-size: 0.92rem; font-weight: 700; color: var(--tan); margin-bottom: 0.25rem; }
+  .feat p { font-size: 0.8rem; color: rgba(255,255,255,0.55); line-height: 1.55; }
+
+  #about {
+    padding: 7rem 4rem;
+    background: var(--cream);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .sec-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 700; margin-bottom: 0.6rem; }
+  .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 4.5vw, 3.5rem); letter-spacing: 0.03em; color: var(--brown); margin-bottom: 0.5rem; text-align: center; }
+  .sec-title span { color: var(--accent); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+    max-width: 960px; width: 100%; margin-top: 3.5rem;
+  }
+  .about-img-box {
+    border-radius: 20px; overflow: hidden;
+    border: 3px solid var(--tan);
+    box-shadow: 10px 10px 0 var(--tan);
+  }
+  .about-img-inner {
+    width: 100%; height: 360px;
+    background: linear-gradient(135deg, #8b5e3c, #d4a96a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5.5rem;
+  }
+  .about-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--brown); margin-bottom: 1rem; letter-spacing: 0.03em; }
+  .about-text p { color: var(--muted); line-height: 1.85; margin-bottom: 1rem; font-size: 0.96rem; }
+  .values { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.5rem; }
+  .val { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; font-weight: 700; color: var(--brown2); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  #devices {
+    padding: 7rem 4rem;
+    background: var(--brown);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .devices-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem; max-width: 960px; width: 100%; margin-top: 3rem;
+  }
+  .dev-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212,169,106,0.18);
+    border-radius: 18px; padding: 2rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .dev-card:hover { transform: translateY(-6px); border-color: var(--tan); }
+  .dev-icon {
+    width: 56px; height: 56px;
+    background: rgba(232,130,26,0.15); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 1.2rem;
+  }
+  .dev-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; color: var(--tan); margin-bottom: 0.5rem; letter-spacing: 0.04em; }
+  .dev-card p { font-size: 0.87rem; color: rgba(255,255,255,0.6); line-height: 1.65; }
+  .dev-tag {
+    display: inline-block; margin-top: 1rem;
+    background: rgba(232,130,26,0.18); color: var(--tan);
+    font-size: 0.74rem; font-weight: 700; padding: 0.25rem 0.8rem;
+    border-radius: 100px; letter-spacing: 0.05em;
+  }
+
+  #contact {
+    padding: 7rem 4rem;
+    background: var(--cream);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; max-width: 900px; width: 100%;
+    margin-top: 3rem; align-items: start;
+  }
+  .contact-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: var(--brown); margin-bottom: 0.9rem; letter-spacing: 0.03em; }
+  .contact-info p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; margin-bottom: 1.5rem; }
+  .c-row { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; }
+  .c-ico { width: 44px; height: 44px; background: var(--brown); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .c-txt strong { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.1rem; }
+  .c-txt span { font-size: 0.9rem; color: var(--muted); }
+  .contact-form {
+    background: var(--white);
+    border: 1px solid rgba(92,61,30,0.1);
+    border-radius: 18px; padding: 2.2rem;
+    box-shadow: 0 8px 32px rgba(92,61,30,0.08);
+  }
+  .fg { margin-bottom: 1.2rem; }
+  .fg label { display: block; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brown2); margin-bottom: 0.4rem; }
+  .fg input, .fg textarea {
+    width: 100%; padding: 0.78rem 1rem;
+    border: 1.5px solid rgba(92,61,30,0.14); border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 0.92rem;
+    color: var(--dark); background: var(--cream);
+    outline: none; transition: border-color 0.2s;
+  }
+  .fg input:focus, .fg textarea:focus { border-color: var(--accent); }
+  .fg textarea { resize: vertical; min-height: 115px; }
+  .send-btn {
+    width: 100%; background: var(--accent); color: var(--white);
+    border: none; padding: 0.9rem; border-radius: 100px;
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem;
+    cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+  }
+  .send-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.45);
+    text-align: center; padding: 2rem;
+    font-size: 0.85rem;
+  }
+  footer span { color: var(--tan); }
+
+  @media (max-width: 720px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    #home, #about, #devices, #contact { padding: 5rem 1.5rem 4rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .feat-row { grid-template-columns: 1fr; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#home">Үйлд<span>вэр</span></a>
+  <ul class="nav-links">
+    <li><a href="#home" class="active">Нүүр</a></li>
+    <li><a href="#about">Бидний тухай</a></li>
+    <li><a href="#devices">Манай техникүүд</a></li>
+    <li><a href="#contact">Холбоо барих</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Захиалах</a>
+</nav>
+
+<section id="home">
+  <div class="badge">Мини үйлдвэр · Картон цаас нугалалт</div>
+  <h1>Бид <span>Картон цаасыг</span><br/>Хайрцаг болгон хувиргана</h1>
+  <p class="sub">Түүхий картон хуудсыг өндөр чанартай, захиалгат хэмжээтэй хайрцаг болгон хувиргадаг нарийн жижиг үйлдвэр - хурдан, тогтвортой, найдвартай.</p>
+  <div class="hero-btns">
+    <a href="#about" class="btn-main">Манай багтай танилц</a>
+    <a href="#devices" class="btn-ghost">Манай машинуудыг үзэх →</a>
+  </div>
+  <div class="team-wrap">
+    <div class="team-photo">
+      <div class="cam">📸</div>
+      <p>Зураг</p>
+    </div>
+    <div class="photo-label">
+      <h3>Үйлдвэр-ын хамт олон</h3>
+      <p>Хүсэл эрмэлзэлтэй инженерүүд ба операторууд төгс нугалаа бүрийн ард байдаг.</p>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><div class="n">5,000+</div><div class="l">Хайрцаг / Өдөрт</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">Багийн гишүүд</div></div>
+    <div class="stat"><div class="n">99.8%</div><div class="l">Нарийвчлал</div></div>
+    <div class="stat"><div class="n">24/7</div><div class="l">Дэмжлэг</div></div>
+  </div>
+  <div class="feat-row">
+    <div class="feat">
+      <div class="feat-icon">📦</div>
+      <div><h4>Дурын хэмжээ</h4><p>Ямар ч хэмжээ, ямар ч зузаан — таны хүссэн хэмжээгээр яг таг нугална.</p></div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚙️</div>
+      <div><h4>Автомат нугалалт</h4><p>Үйлдвэрийн машинууд их хэмжээний захиалгыг тогтмол хурдаар гүйцэтгэнэ.</p></div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🌱</div>
+      <div><h4>Байгальд ээлтэй</h4><p>100% дахин боловсруулах боломжтой материал, хог хаягдал багатай үйлдвэрлэл.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <p class="sec-label">Бид хэн бэ</p>
+  <h2 class="sec-title"><span>Үйлдвэр</span> үйлдвэрийн тухай</h2>
+  <div class="about-grid">
+    <div class="about-img-box">
+      <div class="about-img-inner">🏭</div>
+    </div>
+    <div class="about-text">
+      <h3>Нарийвчлал дээр суурилж,<br/>Хүсэл тэмүүллээр хөтлөгдөнө</h3>
+      <p>BoxCraft бол бүх төрлийн бизнес эрхлэгчдэд зориулж картоныг бат бөх, нарийн хийцтэй хайрцаг болгон автоматаар нугалах чиглэлээр мэргэшсэн мини үйлдвэр юм. Бид сав баглаа боодлыг илүү ухаалаг, хурдан, найдвартай болгох нэг зорилготойгоор байгуулагдсан.</p>
+      <p>Манай чадварлаг оператор, инженерүүдийн баг картон цаас бүрийг хэмжиж, зүсэж, нугалан машины түвшний нарийвчлалтайгаар гүйцэтгэдэг хатуу хяналттай байгууламжийг ажиллуулдаг.</p>
+      <div class="values">
+        <div class="val"><div class="dot"></div>Чанарыг эрхэмлэх үйлдвэрлэлийн процесс</div>
+        <div class="val"><div class="dot"></div>Бөөний захиалгыг хурдан гүйцэтгэх чадвар</div>
+        <div class="val"><div class="dot"></div>Хүссэн хэмжээгээр захиалга авах боломж</div>
+        <div class="val"><div class="dot"></div>Тогтвортой, дахин боловсруулах материал</div>
+        <div class="val"><div class="dot"></div>Орон нутгийн үйлдвэрлэл, дэлхийн стандарт</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="devices">
+  <p class="sec-label" style="color:var(--tan)">Манай тоног төхөөрөмж</p>
+  <h2 class="sec-title" style="color:var(--white)">Нугалаа бүрийг <span>Хүчирхэгжүүлэх техникүүд</span></h2>
+  <div class="devices-grid">
+    <div class="dev-card">
+      <div class="dev-icon">✂️</div>
+      <h3>Робот гар</h3>
+      <p>Хайрцаг нуглана.</p>
+      <span class="dev-tag">Робот гар</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">📐</div>
+      <h3>Conveyor</h3>
+      <p>Үйлдвэрийн зам.Зам хөдөлж байхад хайрцаг нугалагдана.</p>
+      <span class="dev-tag">Хэрчлээс</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">🤖</div>
+      <h3>Моторууд</h3>
+      <p>Моторууд үйлдвэрийн замийг хөдөлгөх хайрцаг нугалахад гол чухал зүйл юм.</p>
+      <span class="dev-tag">Motor</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">📏</div>
+      <h3>Ламинатор</h3>
+      <p>Багц бүр чанарын хяналтаар орж, хэмжээ болон нугалааны нарийвчлалыг нэг бүрчлэн шалгадаг.</p>
+      <span class="dev-tag">Чанарын хяналт</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">🔧</div>
+      <h3>Microstep driver</h3>
+      <p>Микро алхмын драйвер нь шаталсан моторыг тэжээдэг электрон хянагч бөгөөд бүрэн алхмуудыг жижиг завсрын алхмуудад (микро алхалт) хувааж, илүү нарийвчлалтай, хөдөлгөөнийг жигд болгож, дуу чимээг бууруулдаг.</p>
+      <span class="dev-tag">Гүйцэтгэл</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">🖨️</div>
+      <h3>Nest brand</h3>
+      <p>Төгсгөлд nest brand vending machine -аар доош хайрцаг дээр унаж ирж таны бүтээгдэхүүн бэлэн болно.</p>
+      <span class="dev-tag">Төгсгөл</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="sec-label">Холбогдох</p>
+  <h2 class="sec-title">Бидэнтэй <span>Холбоо барих</span></h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Хайрцгийн талаар ярилцъя</h3>
+      <p>Танд бөөний захиалга, тусгай хэмжээ хэрэгтэй байгаа бол эсвэл зүгээр л үйлдвэртэй танилцахыг хүсвэл бид туслахад бэлэн байна.</p>
+      <div class="c-row">
+        <div class="c-ico">📍</div>
+        <div class="c-txt"><strong>Хаяг</strong><span>Nest Education IT school</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-ico">📞</div>
+        <div class="c-txt"><strong>Утас</strong><span>+976 99 XX XXXX</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-ico">✉️</div>
+        <div class="c-txt"><strong>И-мэйл</strong><span>nest@gmail.com</span></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="fg">
+        <label>Нэр</label>
+        <input type="text" placeholder="ж.нь Бат-Эрдэнэ"/>
+      </div>
+      <div class="fg">
+        <label>И-мэйл</label>
+        <input type="email" placeholder="таны@жишээ.ком"/>
+      </div>
+      <div class="fg">
+        <label>Гарчиг</label>
+        <input type="text" placeholder="Бөөний захиалгын лавлагаа..."/>
+      </div>
+      <div class="fg">
+        <label>Мессеж</label>
+        <textarea placeholder="Танд юу хэрэгтэй байгааг хэлнэ үү — хайрцгийн хэмжээ, тоо ширхэг, хугацаа..."></textarea>
+      </div>
+      <button class="send-btn">Мессеж илгээх →</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.45 });
+
+  sections.forEach(s => observer.observe(s));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  document.querySelector('.send-btn').addEventListener('click', () => {
+    const btn = document.querySelector('.send-btn');
+    btn.textContent = '✅ Мессеж илгээгдлээ!';
+    btn.style.background = '#2d7d46';
+    setTimeout(() => {
+      btn.textContent = 'Мессеж илгээх →';
+      btn.style.background = '';
+    }, 3000);
+  });
+</script>
+</body>
+</html>
